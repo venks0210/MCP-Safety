@@ -1,8 +1,8 @@
-# MCPSafety
+# MCPTrust
 
 **Audit an MCP server or Agent Skill *before* you install it.**
 
-MCPSafety is a multi-agent security auditor that reads an untrusted MCP server or
+MCPTrust is a multi-agent security auditor that reads an untrusted MCP server or
 Agent Skill — its code, its manifest, and the text it would inject into your
 agent's context — and returns a **trust score (0–100)** and a **verdict
 (TRUSTED / REVIEW / BLOCK)** with explainable, plain-English findings. It never
@@ -27,7 +27,7 @@ whitepapers describe exactly how this goes wrong:
 - **Hardcoded secrets, dangerous code, over-scoped permissions, slopsquatted
   dependencies** — the classic supply-chain risks (Day 4).
 
-There is no consumer tooling to check a server before you trust it. **MCPSafety is
+There is no consumer tooling to check a server before you trust it. **MCPTrust is
 that tool.**
 
 ## The solution
@@ -105,7 +105,7 @@ posture* criterion:
 
 ---
 
-## The threats MCPSafety detects
+## The threats MCPTrust detects
 
 | Threat class | Severity | What it catches |
 |---|---|---|
@@ -155,7 +155,7 @@ python demo/demo.py            # deterministic, no key
 python demo/demo.py --agents   # also routes through the ADK orchestrator (needs GOOGLE_API_KEY)
 ```
 
-### Run MCPSafety as an MCP server
+### Run MCPTrust as an MCP server
 
 ```bash
 python -m mcptrust.mcp_server.server     # stdio MCP server exposing audit_mcp_server
@@ -177,7 +177,7 @@ python -m pytest -q      # 22 tests incl. the corpus eval gate
 | Required concept | Evidence | Where |
 |---|---|---|
 | **Agent / Multi-agent (ADK)** | Orchestrator + 4 specialist `LlmAgent`s with defensible boundaries | `mcptrust/agents/orchestrator.py` (Code) |
-| **MCP Server** | MCPSafety exposed as a stdio MCP server (`audit_mcp_server`) | `mcptrust/mcp_server/server.py` (Code) |
+| **MCP Server** | MCPTrust exposed as a stdio MCP server (`audit_mcp_server`) | `mcptrust/mcp_server/server.py` (Code) |
 | **Security features** | Policy-Server tool gate + Zero Ambient Authority + read-only ingest + Vibe Diff + dogfood secret hook | `mcptrust/agents/security.py`, `core/ingest.py` (Code) |
 | **Agent Skills** | 4 skills with SKILL.md + scripts + references + EDD eval cases | `skills/` (Code) |
 | **Antigravity** | Built in Antigravity; sandbox toggle + report viewing shown in the video | (Video) |
@@ -195,7 +195,7 @@ mcptrust/
 │   ├── core/          # models, scoring, safe read-only ingest
 │   ├── analyzers/     # the deterministic detection engines (one per threat class)
 │   ├── agents/        # ADK multi-agent layer + security guardrails
-│   ├── mcp_server/    # MCPSafety exposed AS an MCP server
+│   ├── mcp_server/    # MCPTrust exposed AS an MCP server
 │   ├── report/        # terminal / markdown / json renderers + Vibe Diff
 │   └── cli.py         # `mcptrust audit ...`
 ├── skills/            # 4 Agent Skills (SKILL.md + scripts + references + evals)
@@ -211,7 +211,7 @@ mcptrust/
 Every "poisoned" sample under `corpus/poisoned/` is an **inert test fixture** — a
 detectable *signature*, never functional malware (analogous to an EICAR antivirus
 test file). Outbound hosts use reserved `.test` domains; credentials are
-synthetic non-functional strings. **MCPSafety never executes any target** — it
+synthetic non-functional strings. **MCPTrust never executes any target** — it
 reads everything as text.
 
 ## License
